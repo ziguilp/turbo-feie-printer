@@ -2,14 +2,15 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 19:29:30
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-18 20:22:20
+ * @LastEditTime  : 2022-12-18 20:56:07
  * @FilePath      : /turbo-feie-printer/README.md
  * @Description   : 
  * 
  * Copyright (c) 2022 by turbo 664120459@qq.com, All Rights Reserved. 
 -->
 ## 飞鹅打印机SDK --- 手上没有打印机，未经验证
-`根据飞鹅开放平台放出的文档简单处理，原文档地址:[http://help.feieyun.com/document.php]`
+根据飞鹅开放平台放出的文档简单处理，[原文档传送门](http://help.feieyun.com/document.php)
+
 
 ---
 ### 使用文档
