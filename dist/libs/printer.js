@@ -181,6 +181,17 @@ var FeiePrinter = /** @class */ (function () {
             });
         });
     };
+    /**
+     * 解析打印机背部的二维码
+     * @param str
+     */
+    FeiePrinter.prototype.parseQrCode = function (str) {
+        var r = str.split(":");
+        return {
+            sn: r && r[0],
+            key: r && r[1]
+        };
+    };
     return FeiePrinter;
 }());
 exports.FeiePrinter = FeiePrinter;

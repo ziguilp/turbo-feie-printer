@@ -43,3 +43,24 @@ export interface FeiePrinterConf {
      */
     backurl?: string;
 }
+/**
+ * 订单行参数
+ */
+export interface OrderRow {
+    /**
+     * 商品名称
+     */
+    title: string;
+    /**
+     * 单价
+     */
+    price: number;
+    /**
+     * 数量
+     */
+    goodsNum: number;
+    /**
+     * 金额
+     */
+    amount: number;
+}

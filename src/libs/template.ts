@@ -2,14 +2,15 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 16:12:13
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-18 19:57:09
+ * @LastEditTime  : 2022-12-26 11:34:49
  * @FilePath      : /turbo-feie-printer/src/libs/template.ts
  * @Description   : 
  * 
  * Copyright (c) 2022 by turbo 664120459@qq.com, All Rights Reserved. 
  */
-import { FeiePrinterConf, FeieResponse } from "./types";
+import { FeiePrinterConf, FeieResponse, OrderRow } from "./types";
 import { FeieHttp } from "./base";
+import { Util } from "./util";
 
 
 /**
@@ -161,6 +162,77 @@ export class FeieTemplate {
      */
     static textRightAlign(text: string) {
         return `<RIGHT>${text}</RIGHT>`
+    }
+
+
+
+
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符 
+     * @param numLength 数量字符长度 58mm的机器建议3个字符 
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符 
+     * @param 
+     * @returns 
+     */
+    static orderRowFormat(orderRow: OrderRow, {
+        titleLength = 14,
+        priceLength = 6,
+        numLength = 3,
+        amountLength = 6
+    } = {}) {
+        let name = orderRow.title,
+            price = String(orderRow.price).padEnd(priceLength, ' '),
+            num = String(orderRow.goodsNum).padEnd(numLength, ' '),
+            prices = String(orderRow.amount).padEnd(amountLength, ' ');
+
+        const lan = Util.mb_strlen(name)
+
+        if (lan <= titleLength) {
+            name += ''.padEnd(titleLength - lan, ' ')
+            return `${name} ${price} ${num} ${prices}<BR>`
+        }
+
+        // 超长的字符串要进行多段截取
+        return (Util.mb_string_chunk(name, titleLength).reduce((p, c, i) => {
+            if (i == 0) {
+                p.push(`${c} ${price} ${num} ${prices}`)
+            } else {
+                p.push(`${c}`)
+            }
+            return p
+        }, [] as any)).join("<BR>") + '<BR>'
+
+    }
+
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符 
+     * @param numLength 数量字符长度 58mm的机器建议3个字符 
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符 
+     * @param 
+     * @returns 
+     */
+    static orderRowsFormat(orderRows: OrderRow[], {
+        titleLength = 14,
+        priceLength = 6,
+        numLength = 3,
+        amountLength = 6
+    } = {}) {
+        return orderRows.reduce((p, c, i) => {
+            return p += FeieTemplate.orderRowFormat(c, {
+                titleLength,
+                priceLength,
+                numLength,
+                amountLength
+            })
+        }, '')
     }
 
     /**

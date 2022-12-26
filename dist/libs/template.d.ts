@@ -1,4 +1,4 @@
-import { FeiePrinterConf } from "./types";
+import { FeiePrinterConf, OrderRow } from "./types";
 import { FeieHttp } from "./base";
 /**
  * 飞鹅打印机
@@ -83,6 +83,40 @@ export declare class FeieTemplate {
      * 文本右对齐
      */
     static textRightAlign(text: string): string;
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符
+     * @param numLength 数量字符长度 58mm的机器建议3个字符
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符
+     * @param
+     * @returns
+     */
+    static orderRowFormat(orderRow: OrderRow, { titleLength, priceLength, numLength, amountLength }?: {
+        titleLength?: number | undefined;
+        priceLength?: number | undefined;
+        numLength?: number | undefined;
+        amountLength?: number | undefined;
+    }): string;
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符
+     * @param numLength 数量字符长度 58mm的机器建议3个字符
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符
+     * @param
+     * @returns
+     */
+    static orderRowsFormat(orderRows: OrderRow[], { titleLength, priceLength, numLength, amountLength }?: {
+        titleLength?: number | undefined;
+        priceLength?: number | undefined;
+        numLength?: number | undefined;
+        amountLength?: number | undefined;
+    }): string;
     /**
      * @param text 添加文本内容
      * @autoBr 自动添加换行符号

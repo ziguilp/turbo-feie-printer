@@ -1,6 +1,6 @@
 {
     "name": "turbo-feie-printer",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "飞鹅打印机",
     "main": "./dist/index.js",
     "scripts": {

@@ -41,4 +41,12 @@ export declare class FeiePrinter {
      * @returns 打印返回true,未打印返回false。
      */
     queryOrderPrintState(orderId: string): Promise<boolean>;
+    /**
+     * 解析打印机背部的二维码
+     * @param str
+     */
+    parseQrCode(str: string): {
+        sn: string;
+        key: string;
+    };
 }

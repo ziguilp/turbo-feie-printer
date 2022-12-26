@@ -2,7 +2,7 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 16:12:13
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-18 20:19:01
+ * @LastEditTime  : 2022-12-25 18:01:10
  * @FilePath      : /turbo-feie-printer/src/libs/printer.ts
  * @Description   : 
  * 
@@ -131,5 +131,17 @@ export class FeiePrinter {
         const res: FeieResponse<boolean> = await this.http.request(data)
 
         return res.data || false
+    }
+
+    /**
+     * 解析打印机背部的二维码
+     * @param str
+     */
+    parseQrCode(str: string) {
+        const r = str.split(":")
+        return {
+            sn: r && r[0],
+            key: r && r[1]
+        }
     }
 }

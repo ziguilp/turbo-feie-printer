@@ -2,13 +2,13 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 19:29:30
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-18 20:56:07
+ * @LastEditTime  : 2022-12-26 11:29:51
  * @FilePath      : /turbo-feie-printer/README.md
  * @Description   : 
  * 
  * Copyright (c) 2022 by turbo 664120459@qq.com, All Rights Reserved. 
 -->
-## 飞鹅打印机SDK --- 手上没有打印机，未经验证
+## 飞鹅打印机SDK 
 根据飞鹅开放平台放出的文档简单处理，[原文档传送门](http://help.feieyun.com/document.php)
 
 
@@ -20,26 +20,35 @@ yarn add turbo-feie-printer
 ```
 
 ``` Typescript
-import { Feie } from 'turbo-feie-printer';
-import { FeieTemplate } from 'turbo-feie-printer/dist/libs/template';
+import { Feie } from "./dist";
+import { FeieTemplate } from "./dist/libs/template";
 
-const feie = new Feie('test', '1231231')
- 
+
+const user = '********';
+const ukey = '********';
+
+const feie = new Feie(user, ukey);
 
 const printer = feie.getPrinterManger()
 
+// 解析打印机背后的二维码
+const { sn, key } = printer.parseQrCode('1234567:7yet221')
+
 // 添加打印机
 printer.add({
-    sn: 'd111231111',
-    key: '12345678',
+    sn: sn,
+    key: key,
     remark: '厨房',
-    simno: '621000000000000'
+    simno: ''
+}).then((res) => {
+    console.log(`添加打印机`, res)
 })
+
 
 // 移除打印机
 printer.remove('d111231111')
 
-// 修改
+// 修改打印机
 printer.modify({
     sn: 'd111231111',
     remark: '厨房',
@@ -47,34 +56,117 @@ printer.modify({
 })
 
 // 查询打印机状态
-printer.queryPrinterStatus('d111231111')
+printer.queryPrinterStatus(sn).then((p) => {
+    console.log(`打印机状态：`, p)
+})
 
 
 // 查询订单打印状态
 printer.queryOrderPrintState('816501678_20160919184316_1419533539')
 
-// 打印
+// 打印58mm宽的纸
+const goods = [
+    {
+        title: "番茄炒粉",
+        price: 1200,
+        goodsNum: 1,
+        amount: 1200
+    },
+    {
+        title: "西红柿炒鸡蛋",
+        price: 1200,
+        goodsNum: 1,
+        amount: 1200
+    },
+    {
+        title: "西红柿炒鸡蛋(500g装)",
+        price: 1200,
+        goodsNum: 1,
+        amount: 1200
+    },
+    {
+        title: "西红柿炒鸡蛋(1500g装)",
+        price: 3500,
+        goodsNum: 3,
+        amount: 10500
+    },
+    {
+        title: "老北京乡土走地鸡(1500g装)",
+        price: 3500,
+        goodsNum: 3,
+        amount: 10500
+    },
+    {
+        title: "日本进口雪花和牛(3kg装)",
+        price: 35000,
+        goodsNum: 3,
+        amount: 105000
+    },
+    {
+        title: "日本进口😄雪花和牛(3kg装)",
+        price: 35000,
+        goodsNum: 3,
+        amount: 105000
+    },
+    {
+        title: "YSL井口装2023元旦纪念版",
+        price: 350.00,
+        goodsNum: 3,
+        amount: 1050.00
+    },
+    {
+        title: "戴尔（DELL）成就3690商用办公台式电脑家用迷你单主机【i5-11400 16G 512G固态 定制】",
+        price: 3450.00,
+        goodsNum: 1,
+        amount: 3450.00
+    },
+    {
+        title: 'ThinkPad 联想ThinkBook16+ 22款12代英特尔酷睿处理器 16英寸笔记本电脑 i5-12500H 16G Xe显卡 01CD',
+        price: 5629.00,
+        goodsNum: 1,
+        amount: 5629.00
+    }
+]
+
+
+
 const tmp = feie.getTemplateManager()
-tmp.addText(FeieTemplate.textCenterAndBigger("示例"))
+tmp.addText(FeieTemplate.textCenterAndBigger("1# 新订单"))
     .addText(FeieTemplate.textRightAlign(`#2号店`))
-    .addText('名称　　　　　 单价  数量 金额')
-    .addText('番　　　　　　 1.0    1   1.0')
-    .addText('番茄　　　　　 1.0    1   1.0')
-    .addText('番茄炒　　　　 1.0    1   1.0')
-    .addText('番茄炒粉　　　 1.0    1   1.0')
-    .addText('番茄炒粉　　　 100.0    1   100.0')
+    .barcodeC('2022120000120001234567')//订单号
+    .textBr()
+    .textBr()
+    .addText('名称           单价  数量 金额')
+    .addText('--------------------------------')
+    .addText(FeieTemplate.orderRowsFormat(goods, {
+        titleLength: 14,
+        priceLength: 6,
+        numLength: 3,
+        amountLength: 6
+    }))
     .addText('--------------------------------')
     .addText(`合计：xx.0元`)
     .addText('--------------------------------')
+    .addText(`收货人：王大锤`)
     .addText(`地址：xxxxxxxxxxxxxxxxx`)
     .addText(`联系电话：138000000000`)
-    .addText(`时间：2011-01-06 19:30:10`)
+    .addText(`时间：2022-12-25 19:30:10`)
+    .addText(`备注：多家点辣椒`)
     .textBr()
-    .addText('----------请扫描二维码----------')
+    .addText('------请扫描二维码关注我们------')
+    .textBr()
     .qrcode('https://baidu.com')
     .printLogo()
+    .setPrinter(sn)
     .cutPaper()
-    .doPrint()
+    .doPrint().then(res => {
+        console.log(`打印成功`, res)
+    })
 
-console.log(tmp.getPrintContent())
+console.log(tmp.getPrintContent().replace(/\<BR\>/g, '\n'))
+
+
 ```
+
+## 打印效果图
+<img src="./img.jpeg">

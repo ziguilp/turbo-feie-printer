@@ -37,6 +37,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.FeieTemplate = void 0;
+var util_1 = require("./util");
 /**
  * 飞鹅打印机
  */
@@ -164,6 +165,58 @@ var FeieTemplate = /** @class */ (function () {
      */
     FeieTemplate.textRightAlign = function (text) {
         return "<RIGHT>".concat(text, "</RIGHT>");
+    };
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符
+     * @param numLength 数量字符长度 58mm的机器建议3个字符
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符
+     * @param
+     * @returns
+     */
+    FeieTemplate.orderRowFormat = function (orderRow, _a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.titleLength, titleLength = _c === void 0 ? 14 : _c, _d = _b.priceLength, priceLength = _d === void 0 ? 6 : _d, _e = _b.numLength, numLength = _e === void 0 ? 3 : _e, _f = _b.amountLength, amountLength = _f === void 0 ? 6 : _f;
+        var name = orderRow.title, price = String(orderRow.price).padEnd(priceLength, ' '), num = String(orderRow.goodsNum).padEnd(numLength, ' '), prices = String(orderRow.amount).padEnd(amountLength, ' ');
+        var lan = util_1.Util.mb_strlen(name);
+        if (lan <= titleLength) {
+            name += ''.padEnd(titleLength - lan, ' ');
+            return "".concat(name, " ").concat(price, " ").concat(num, " ").concat(prices, "<BR>");
+        }
+        // 超长的字符串要进行多段截取
+        return (util_1.Util.mb_string_chunk(name, titleLength).reduce(function (p, c, i) {
+            if (i == 0) {
+                p.push("".concat(c, " ").concat(price, " ").concat(num, " ").concat(prices));
+            }
+            else {
+                p.push("".concat(c));
+            }
+            return p;
+        }, [])).join("<BR>") + '<BR>';
+    };
+    /**
+     * 订单行格式化
+     * 58mm的机器,一行打印16个汉字,32个字母;80mm的机器,一行打印24个汉字,48个字母
+     * @param orderRow
+     * @param titleLength 品名字符长度 58mm的机器建议14个字符[7个汉字]
+     * @param priceLength 单价字符长度 58mm的机器建议6个字符
+     * @param numLength 数量字符长度 58mm的机器建议3个字符
+     * @param amountLength 金额字符长度 58mm的机器建议6个字符
+     * @param
+     * @returns
+     */
+    FeieTemplate.orderRowsFormat = function (orderRows, _a) {
+        var _b = _a === void 0 ? {} : _a, _c = _b.titleLength, titleLength = _c === void 0 ? 14 : _c, _d = _b.priceLength, priceLength = _d === void 0 ? 6 : _d, _e = _b.numLength, numLength = _e === void 0 ? 3 : _e, _f = _b.amountLength, amountLength = _f === void 0 ? 6 : _f;
+        return orderRows.reduce(function (p, c, i) {
+            return p += FeieTemplate.orderRowFormat(c, {
+                titleLength: titleLength,
+                priceLength: priceLength,
+                numLength: numLength,
+                amountLength: amountLength
+            });
+        }, '');
     };
     /**
      * @param text 添加文本内容
