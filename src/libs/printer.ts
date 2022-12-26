@@ -2,7 +2,7 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 16:12:13
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-26 12:01:30
+ * @LastEditTime  : 2022-12-26 12:15:06
  * @FilePath      : /turbo-feie-printer/src/libs/printer.ts
  * @Description   : 
  * 
@@ -136,7 +136,10 @@ export class FeiePrinter {
             waiting: number
         }> = await this.http.request(data)
 
-        return res.data
+        return {
+            print: Number(res.data?.print || 0),
+            waiting: Number(res.data?.waiting || 0),
+        }
     }
 
     /**

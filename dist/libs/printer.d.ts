@@ -44,7 +44,7 @@ export declare class FeiePrinter {
     queryPrinterOrderNumByDate(sn: string, date: string): Promise<{
         print: number;
         waiting: number;
-    } | null>;
+    }>;
     /**
      * 根据打印返回的订单ID查询是否打印成功
      * @param orderId 提交打印时根据sn返回的编码

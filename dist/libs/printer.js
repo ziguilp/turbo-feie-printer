@@ -165,10 +165,11 @@ var FeiePrinter = /** @class */ (function () {
      * @returns
      */
     FeiePrinter.prototype.queryPrinterOrderNumByDate = function (sn, date) {
+        var _a, _b;
         return __awaiter(this, void 0, void 0, function () {
             var data, res;
-            return __generator(this, function (_a) {
-                switch (_a.label) {
+            return __generator(this, function (_c) {
+                switch (_c.label) {
                     case 0:
                         data = {
                             apiname: "Open_queryOrderInfoByDate",
@@ -177,8 +178,11 @@ var FeiePrinter = /** @class */ (function () {
                         };
                         return [4 /*yield*/, this.http.request(data)];
                     case 1:
-                        res = _a.sent();
-                        return [2 /*return*/, res.data];
+                        res = _c.sent();
+                        return [2 /*return*/, {
+                                print: Number(((_a = res.data) === null || _a === void 0 ? void 0 : _a.print) || 0),
+                                waiting: Number(((_b = res.data) === null || _b === void 0 ? void 0 : _b.waiting) || 0),
+                            }];
                 }
             });
         });
