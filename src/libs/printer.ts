@@ -2,7 +2,7 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 16:12:13
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-25 18:01:10
+ * @LastEditTime  : 2022-12-26 12:01:30
  * @FilePath      : /turbo-feie-printer/src/libs/printer.ts
  * @Description   : 
  * 
@@ -118,14 +118,52 @@ export class FeiePrinter {
     }
 
     /**
+     * 查询打印机的订单数
+     * @param sn 
+     * @param date 查询日期，格式YY-MM-DD，如：2016-09-20
+     * @returns 
+     */
+    async queryPrinterOrderNumByDate(sn: string, date: string) {
+
+        const data = {
+            apiname: "Open_queryOrderInfoByDate",//不需要修改
+            sn: sn,//打印机编号
+            date
+        }
+
+        const res: FeieResponse<{
+            print: number,
+            waiting: number
+        }> = await this.http.request(data)
+
+        return res.data
+    }
+
+    /**
      * 根据打印返回的订单ID查询是否打印成功
      * @param orderId 提交打印时根据sn返回的编码
      * @returns 打印返回true,未打印返回false。
      */
     async queryOrderPrintState(orderId: string) {
         const data = {
-            apiname: "Open_queryPrinterStatus",//不需要修改
+            apiname: "Open_queryOrderState",//不需要修改
             orderid: orderId,
+        }
+
+        const res: FeieResponse<boolean> = await this.http.request(data)
+
+        return res.data || false
+    }
+
+    /**
+     * 清空待打印的订单
+     * @param sn 
+     * @returns 打印返回true,未打印返回false。
+     */
+    async flushUnPrintedOrder(sn: string) {
+        const data = {
+            apiname: "Open_delPrinterSqs",//不需要修改
+            sn,
         }
 
         const res: FeieResponse<boolean> = await this.http.request(data)

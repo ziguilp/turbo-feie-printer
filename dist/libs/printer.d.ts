@@ -36,11 +36,27 @@ export declare class FeiePrinter {
      */
     queryPrinterStatus(sn: string): Promise<string | null>;
     /**
+     * 查询打印机的订单数
+     * @param sn
+     * @param date 查询日期，格式YY-MM-DD，如：2016-09-20
+     * @returns
+     */
+    queryPrinterOrderNumByDate(sn: string, date: string): Promise<{
+        print: number;
+        waiting: number;
+    } | null>;
+    /**
      * 根据打印返回的订单ID查询是否打印成功
      * @param orderId 提交打印时根据sn返回的编码
      * @returns 打印返回true,未打印返回false。
      */
     queryOrderPrintState(orderId: string): Promise<boolean>;
+    /**
+     * 清空待打印的订单
+     * @param sn
+     * @returns 打印返回true,未打印返回false。
+     */
+    flushUnPrintedOrder(sn: string): Promise<boolean>;
     /**
      * 解析打印机背部的二维码
      * @param str

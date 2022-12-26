@@ -159,6 +159,31 @@ var FeiePrinter = /** @class */ (function () {
         });
     };
     /**
+     * 查询打印机的订单数
+     * @param sn
+     * @param date 查询日期，格式YY-MM-DD，如：2016-09-20
+     * @returns
+     */
+    FeiePrinter.prototype.queryPrinterOrderNumByDate = function (sn, date) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        data = {
+                            apiname: "Open_queryOrderInfoByDate",
+                            sn: sn,
+                            date: date
+                        };
+                        return [4 /*yield*/, this.http.request(data)];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data];
+                }
+            });
+        });
+    };
+    /**
      * 根据打印返回的订单ID查询是否打印成功
      * @param orderId 提交打印时根据sn返回的编码
      * @returns 打印返回true,未打印返回false。
@@ -170,8 +195,31 @@ var FeiePrinter = /** @class */ (function () {
                 switch (_a.label) {
                     case 0:
                         data = {
-                            apiname: "Open_queryPrinterStatus",
+                            apiname: "Open_queryOrderState",
                             orderid: orderId,
+                        };
+                        return [4 /*yield*/, this.http.request(data)];
+                    case 1:
+                        res = _a.sent();
+                        return [2 /*return*/, res.data || false];
+                }
+            });
+        });
+    };
+    /**
+     * 清空待打印的订单
+     * @param sn
+     * @returns 打印返回true,未打印返回false。
+     */
+    FeiePrinter.prototype.flushUnPrintedOrder = function (sn) {
+        return __awaiter(this, void 0, void 0, function () {
+            var data, res;
+            return __generator(this, function (_a) {
+                switch (_a.label) {
+                    case 0:
+                        data = {
+                            apiname: "Open_delPrinterSqs",
+                            sn: sn,
                         };
                         return [4 /*yield*/, this.http.request(data)];
                     case 1:
