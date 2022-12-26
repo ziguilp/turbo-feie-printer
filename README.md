@@ -2,7 +2,7 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 19:29:30
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-26 11:29:51
+ * @LastEditTime  : 2022-12-26 11:40:19
  * @FilePath      : /turbo-feie-printer/README.md
  * @Description   : 
  * 
@@ -20,8 +20,8 @@ yarn add turbo-feie-printer
 ```
 
 ``` Typescript
-import { Feie } from "./dist";
-import { FeieTemplate } from "./dist/libs/template";
+import { Feie } from "turbo-feie-printer";
+import { FeieTemplate } from "turbo-feie-printer/dist/libs/template";
 
 
 const user = '********';
