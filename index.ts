@@ -2,7 +2,7 @@
  * @Author        : turbo 664120459@qq.com
  * @Date          : 2022-12-18 19:23:34
  * @LastEditors   : turbo 664120459@qq.com
- * @LastEditTime  : 2022-12-26 11:23:50
+ * @LastEditTime  : 2022-12-26 12:11:10
  * @FilePath      : /turbo-feie-printer/index.ts
  * @Description   : 
  * 
@@ -52,6 +52,13 @@ printer.queryPrinterStatus(sn).then((p) => {
 
 // 查询订单打印状态
 // printer.queryOrderPrintState('816501678_20160919184316_1419533539')
+
+
+// 清空待打印
+// printer.flushUnPrintedOrder('816501678')
+
+// 查询打印订单
+printer.queryPrinterOrderNumByDate('816501678', '2022-12-26')
 
 // 打印58mm宽的纸
 const goods = [
